@@ -1,0 +1,322 @@
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Cek Pola Asuh</title>
+<meta name="description" content="Survei refleksi diri singkat untuk orang tua: kenali kecenderungan pola asuh Anda.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#faf6f0; --card:#ffffff; --ink:#2b2622; --muted:#6f665e; --line:#e9e1d6;
+    --accent:#d97b29; --accent-ink:#ffffff; --soft:#fbeedd;
+    --c-a:#3f8f6b; --c-b:#b4533c; --c-c:#c9951a; --c-d:#4a7bb7; --c-e:#8a7f74;
+    --shadow:0 6px 24px rgba(60,40,20,.08);
+  }
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){
+      --bg:#1b1917; --card:#252220; --ink:#f2ede7; --muted:#b5aba1; --line:#3a3532;
+      --soft:#3a2b1d; --shadow:0 6px 24px rgba(0,0,0,.35);
+    }
+  }
+  :root[data-theme="dark"]{
+    --bg:#1b1917; --card:#252220; --ink:#f2ede7; --muted:#b5aba1; --line:#3a3532;
+    --soft:#3a2b1d; --shadow:0 6px 24px rgba(0,0,0,.35);
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0}
+  body{
+    background:var(--bg); color:var(--ink);
+    font-family:"Plus Jakarta Sans",system-ui,-apple-system,"Segoe UI",sans-serif;
+    line-height:1.55; -webkit-font-smoothing:antialiased;
+  }
+  .wrap{max-width:640px; margin:0 auto; padding:24px 16px 48px}
+  .brand{font-size:.8rem; letter-spacing:.08em; text-transform:uppercase; color:var(--muted); font-weight:600; margin-bottom:12px}
+  .card{background:var(--card); border:1px solid var(--line); border-radius:20px; padding:28px 24px; box-shadow:var(--shadow)}
+  h1{font-size:1.9rem; line-height:1.2; margin:0 0 12px; font-weight:800}
+  h2{font-size:1.25rem; margin:0 0 8px; font-weight:700}
+  h3{font-size:1rem; margin:0 0 6px; font-weight:700}
+  p{margin:0 0 12px}
+  .muted{color:var(--muted)}
+  .small{font-size:.85rem}
+  .btn{
+    display:inline-flex; align-items:center; justify-content:center; gap:8px;
+    border:0; border-radius:999px; padding:14px 26px; font:inherit; font-weight:700;
+    background:var(--accent); color:var(--accent-ink); cursor:pointer; transition:transform .1s, opacity .2s;
+  }
+  .btn:active{transform:scale(.98)}
+  .btn.ghost{background:transparent; color:var(--ink); border:1px solid var(--line)}
+  .btn:disabled{opacity:.35; cursor:default}
+  .meta{display:flex; gap:16px; flex-wrap:wrap; margin:16px 0 24px; font-size:.9rem; color:var(--muted)}
+  .meta span{background:var(--soft); padding:6px 12px; border-radius:999px; color:var(--ink)}
+
+  /* progress */
+  .progress{display:flex; align-items:center; gap:12px; margin-bottom:20px}
+  .bar{flex:1; height:8px; background:var(--line); border-radius:99px; overflow:hidden}
+  .bar > i{display:block; height:100%; width:0; background:var(--accent); border-radius:99px; transition:width .3s ease}
+  .count{font-size:.85rem; color:var(--muted); font-weight:600; min-width:48px; text-align:right}
+
+  .question{font-size:1.25rem; font-weight:700; line-height:1.4; margin:4px 0 22px; min-height:3.5em}
+  .options{display:grid; gap:10px}
+  .opt{
+    display:flex; align-items:center; gap:14px; width:100%; text-align:left;
+    font:inherit; font-weight:600; color:var(--ink); background:var(--card);
+    border:1.5px solid var(--line); border-radius:14px; padding:14px 16px; cursor:pointer;
+    transition:border-color .15s, background .15s;
+  }
+  .opt:hover{border-color:var(--accent)}
+  .opt .dot{
+    width:28px; height:28px; border-radius:50%; flex:0 0 28px;
+    display:grid; place-items:center; font-size:.85rem; background:var(--soft); color:var(--ink);
+  }
+  .opt.sel{border-color:var(--accent); background:var(--soft)}
+  .opt.sel .dot{background:var(--accent); color:var(--accent-ink)}
+  .nav{display:flex; justify-content:space-between; margin-top:20px}
+
+  /* result */
+  .hero{border-radius:16px; padding:20px; margin:8px 0 20px; color:#fff}
+  .hero .tag{font-size:.8rem; opacity:.9; font-weight:600; text-transform:uppercase; letter-spacing:.06em}
+  .hero h2{color:#fff; font-size:1.6rem; margin:4px 0 6px}
+  .hero p{margin:0; opacity:.95}
+  .scores{display:grid; gap:12px; margin:8px 0 24px}
+  .row .lbl{display:flex; justify-content:space-between; font-size:.9rem; font-weight:600; margin-bottom:4px}
+  .row .lbl small{color:var(--muted); font-weight:500}
+  .row .track{height:10px; background:var(--line); border-radius:99px; overflow:hidden}
+  .row .track i{display:block; height:100%; border-radius:99px; width:0; transition:width .6s ease}
+  .advice{border:1px solid var(--line); border-left:5px solid var(--accent); border-radius:14px; padding:16px 18px; margin-bottom:14px}
+  .advice ul{margin:8px 0 0; padding-left:20px}
+  .advice li{margin-bottom:6px}
+  .strength{font-size:.92rem}
+  .note{background:var(--soft); border-radius:14px; padding:16px 18px; margin:20px 0}
+  .refs{font-size:.8rem; color:var(--muted); margin-top:24px}
+  .refs ol{padding-left:18px; margin:6px 0 0}
+  .refs a, .note a{color:var(--accent); word-break:break-word}
+  .actions{display:flex; gap:10px; flex-wrap:wrap; margin-top:8px}
+  .hidden{display:none}
+  footer{text-align:center; font-size:.8rem; color:var(--muted); margin-top:20px}
+  @media (max-width:420px){
+    .card{padding:22px 18px}
+    h1{font-size:1.6rem}
+    .question{font-size:1.12rem}
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="brand">monkdigital</div>
+
+  <!-- INTRO -->
+  <section id="intro" class="card">
+    <h1>Cek Pola Asuh</h1>
+    <p>Setiap orang tua punya cara sendiri dalam mengasuh. Survei singkat ini membantu Anda mengenali <strong>kecenderungan pola asuh</strong> Anda, beserta saran kecil yang bisa langsung dicoba.</p>
+    <p class="muted">Jawablah sesuai yang <em>biasanya</em> Anda lakukan, bukan yang menurut Anda ideal. Tidak ada jawaban benar atau salah.</p>
+    <div class="meta">
+      <span>15 pertanyaan</span><span>± 3 menit</span><span>Tanpa data pribadi</span>
+    </div>
+    <button class="btn" id="startBtn">Mulai</button>
+  </section>
+
+  <!-- QUIZ -->
+  <section id="quiz" class="card hidden">
+    <div class="progress">
+      <div class="bar"><i id="barFill"></i></div>
+      <div class="count" id="count">1/15</div>
+    </div>
+    <div class="muted small">Seberapa sering hal ini terjadi pada Anda?</div>
+    <div class="question" id="qText"></div>
+    <div class="options" id="options"></div>
+    <div class="nav">
+      <button class="btn ghost" id="backBtn">← Kembali</button>
+    </div>
+  </section>
+
+  <!-- RESULT -->
+  <section id="result" class="card hidden">
+    <div class="muted small">Hasil Anda</div>
+    <div class="hero" id="hero"></div>
+
+    <h3>Profil pola asuh Anda</h3>
+    <p class="muted small">Skor tiap gaya 3–15. Kebanyakan orang tua adalah campuran beberapa gaya.</p>
+    <div class="scores" id="scores"></div>
+
+    <h3>Saran untuk Anda</h3>
+    <div id="adviceList"></div>
+
+    <div class="note">
+      <p><strong>Catatan:</strong> hasil ini adalah alat refleksi diri, bukan diagnosis psikologis. Pola asuh bisa berubah seiring waktu dan usia anak.</p>
+      <p style="margin:0">Ingin belajar lebih lanjut? Kementerian PPPA menyediakan materi <strong>Pengasuhan Positif</strong> untuk orang tua (<a href="https://www.kemenpppa.go.id" target="_blank" rel="noopener">kemenpppa.go.id</a>). Anda juga bisa berkonsultasi gratis di <strong>Puspaga</strong> (Pusat Pembelajaran Keluarga) di kabupaten/kota Anda.</p>
+    </div>
+
+    <div class="actions">
+      <button class="btn" id="restartBtn">Ulangi survei</button>
+    </div>
+
+    <div class="refs">
+      <strong>Rujukan</strong>
+      <ol>
+        <li>Baumrind, D. — klasifikasi gaya pengasuhan; Maccoby &amp; Martin — gaya abai (uninvolved). Ringkasan: <a href="https://www.parentingscience.com/authoritative-parenting-style/" target="_blank" rel="noopener">Parenting Science</a></li>
+        <li><a href="https://parenting.mountsinai.org/tip-of-the-week/finding-your-parenting-style" target="_blank" rel="noopener">Mount Sinai Parenting Center — Finding Your Parenting Style</a></li>
+        <li><a href="https://www.childrens.com/health-wellness/how-to-raise-an-independent-child" target="_blank" rel="noopener">Children's Health — How to raise an independent child</a></li>
+        <li>Lythcott-Haims, J. — <em>How to Raise an Adult</em> (<a href="https://ed.stanford.edu/news/we-seem-be-breeding-desire-autonomy-right-out-our-kids-julie-lythcott-haims-helicopter" target="_blank" rel="noopener">Stanford GSE</a>)</li>
+        <li>Kementerian PPPA — Modul &amp; E-Learning Pengasuhan Positif</li>
+      </ol>
+    </div>
+  </section>
+
+  <footer>© monkdigital · Cek Pola Asuh</footer>
+</div>
+
+<script>
+(function(){
+  var STYLES = {
+    a:{ name:"Hangat & Tegas", term:"Otoritatif", color:"var(--c-a)",
+        desc:"Anda cenderung hangat sekaligus menetapkan batas yang jelas, dan mau berdialog dengan anak.",
+        strength:"Anak merasa dicintai sekaligus tahu batas.",
+        tips:["Pertahankan kebiasaan menjelaskan alasan di balik setiap aturan.",
+              "Perlahan beri anak lebih banyak pilihan sesuai usianya.",
+              "Jaga konsistensi aturan antara ayah dan ibu."] },
+    b:{ name:"Tegas & Mengatur", term:"Otoriter", color:"var(--c-b)",
+        desc:"Anda cenderung menetapkan aturan yang ketat dan mengharapkan anak patuh.",
+        strength:"Aturan jelas dan anak tahu apa yang diharapkan darinya.",
+        tips:["Tambahkan satu kalimat “karena…” setiap kali memberi aturan.",
+              "Sediakan waktu khusus untuk mendengarkan anak tanpa langsung mengoreksi.",
+              "Ganti hukuman dengan konsekuensi yang berkaitan langsung dengan perilakunya."] },
+    c:{ name:"Serba Membolehkan", term:"Permisif", color:"var(--c-c)",
+        desc:"Anda cenderung sangat menerima keinginan anak, dengan aturan yang longgar.",
+        strength:"Hubungan hangat dan anak merasa diterima apa adanya.",
+        tips:["Mulai dari 2–3 aturan inti saja (misalnya jam tidur dan waktu layar), lalu tegakkan dengan konsisten.",
+              "Berkata “tidak” dengan hangat tetap merupakan bentuk kasih sayang.",
+              "Tulis aturan rumah bersama anak supaya tidak berubah-ubah."] },
+    d:{ name:"Pelindung", term:"Overprotektif", color:"var(--c-d)",
+        desc:"Anda sangat peduli pada keselamatan anak dan cenderung sulit melepasnya mencoba sendiri.",
+        strength:"Sangat perhatian dan peduli pada keselamatan anak.",
+        tips:["Buat daftar hal yang sebenarnya sudah bisa anak lakukan sendiri, lalu serahkan satu per satu.",
+              "Saat anak menghadapi masalah, tanyakan “menurutmu bagaimana?” sebelum membantu.",
+              "Izinkan kesalahan kecil yang aman, karena dari situ anak belajar."] },
+    e:{ name:"Sibuk & Berjarak", term:"Abai / kurang terlibat", color:"var(--c-e)",
+        desc:"Waktu dan keterlibatan Anda dengan anak cenderung terbatas, sering kali karena kesibukan atau kelelahan.",
+        strength:"Anak cenderung terlatih mandiri.",
+        tips:["Sisihkan 10–15 menit sehari tanpa gawai untuk mengobrol dengan anak.",
+              "Ajukan satu pertanyaan rutin, misalnya “Apa yang paling seru hari ini?”",
+              "Kenali teman-teman dan aktivitas anak."] }
+  };
+
+  var QUESTIONS = [
+    {s:"a", t:"Saat membuat aturan, saya menjelaskan alasannya kepada anak."},
+    {s:"a", t:"Saya mendengarkan pendapat anak sebelum memutuskan hal yang menyangkut dirinya."},
+    {s:"a", t:"Saat anak melanggar aturan, saya memberi konsekuensi yang konsisten tanpa membentak atau mempermalukan."},
+    {s:"b", t:"Anak harus menuruti perintah saya tanpa perlu bertanya “kenapa”."},
+    {s:"b", t:"Saya cepat marah atau menghukum jika anak membantah."},
+    {s:"b", t:"Saya yang menentukan hampir semua hal untuk anak (kegiatan, teman, pilihan sehari-hari)."},
+    {s:"c", t:"Saya sulit berkata “tidak” ketika anak merengek atau terus meminta."},
+    {s:"c", t:"Aturan di rumah sering berubah tergantung suasana hati anak."},
+    {s:"c", t:"Saya membiarkan anak mengatur sendiri jam tidur, jam makan, atau waktu layar."},
+    {s:"d", t:"Saya sangat cemas jika anak mencoba hal baru tanpa pengawasan saya."},
+    {s:"d", t:"Saya sering menyelesaikan masalah anak (PR, konflik dengan teman) sebelum ia sempat mencoba sendiri."},
+    {s:"d", t:"Saya memantau hampir semua aktivitas anak, termasuk isi gawainya."},
+    {s:"e", t:"Saya sering tidak tahu apa yang sedang dilakukan anak atau dengan siapa ia bergaul."},
+    {s:"e", t:"Karena sibuk atau lelah, saya jarang punya waktu mengobrol santai dengan anak."},
+    {s:"e", t:"Saya baru turun tangan kalau masalah anak sudah besar."}
+  ];
+
+  // Urutan tampil diselang-seling antar-gaya supaya polanya tidak mudah ditebak
+  var ORDER = [0,9,6,12,3,1,10,7,13,4,11,2,14,8,5];
+  var LABELS = ["Tidak pernah","Jarang","Kadang","Sering","Selalu"];
+  var HIGH = 11; // skor ≥ 11 dari 15 dianggap menonjol
+
+  var answers = new Array(ORDER.length).fill(null);
+  var idx = 0;
+
+  var $ = function(id){ return document.getElementById(id); };
+  function show(id){
+    ["intro","quiz","result"].forEach(function(s){ $(s).classList.toggle("hidden", s!==id); });
+    window.scrollTo({top:0, behavior:"smooth"});
+  }
+
+  function renderQuestion(){
+    var q = QUESTIONS[ORDER[idx]];
+    $("qText").textContent = q.t;
+    $("count").textContent = (idx+1) + "/" + ORDER.length;
+    $("barFill").style.width = (idx / ORDER.length * 100) + "%";
+    $("backBtn").disabled = idx === 0;
+    var box = $("options"); box.innerHTML = "";
+    LABELS.forEach(function(label, i){
+      var b = document.createElement("button");
+      b.className = "opt" + (answers[idx] === i+1 ? " sel" : "");
+      b.innerHTML = '<span class="dot">'+(i+1)+'</span><span>'+label+'</span>';
+      b.addEventListener("click", function(){ choose(i+1); });
+      box.appendChild(b);
+    });
+  }
+
+  var busy = false;
+  function choose(v){
+    if (busy) return;
+    busy = true;
+    answers[idx] = v;
+    renderQuestion();
+    setTimeout(function(){
+      busy = false;
+      if (idx < ORDER.length - 1){ idx++; renderQuestion(); }
+      else { $("barFill").style.width = "100%"; renderResult(); }
+    }, 220);
+  }
+
+  function renderResult(){
+    var score = {a:0,b:0,c:0,d:0,e:0};
+    ORDER.forEach(function(qi, i){ score[QUESTIONS[qi].s] += answers[i]; });
+
+    var keys = Object.keys(STYLES);
+    var max = Math.max.apply(null, keys.map(function(k){ return score[k]; }));
+    var dominant = keys.filter(function(k){ return score[k] === max; });
+
+    // Hero
+    var d0 = STYLES[dominant[0]];
+    var heroName = dominant.map(function(k){ return STYLES[k].name; }).join(" + ");
+    var heroDesc = dominant.length > 1
+      ? "Dua atau lebih gaya muncul sama kuat pada Anda. Lihat saran untuk masing-masing di bawah."
+      : d0.desc;
+    $("hero").style.background = d0.color;
+    $("hero").innerHTML = '<div class="tag">Kecenderungan utama</div><h2>'+heroName+'</h2><p>'+heroDesc+'</p>';
+
+    // Bars (urut dari skor tertinggi)
+    var sorted = keys.slice().sort(function(x,y){ return score[y]-score[x]; });
+    var sc = $("scores"); sc.innerHTML = "";
+    sorted.forEach(function(k){
+      var st = STYLES[k];
+      var row = document.createElement("div"); row.className = "row";
+      row.innerHTML = '<div class="lbl"><span>'+st.name+' <small>('+st.term+')</small></span><span>'+score[k]+'/15</span></div>'+
+                      '<div class="track"><i style="background:'+st.color+'"></i></div>';
+      sc.appendChild(row);
+      var bar = row.querySelector("i");
+      setTimeout(function(){ bar.style.width = (score[k]/15*100) + "%"; }, 60);
+    });
+
+    // Saran: gaya dominan + gaya lain yang skornya menonjol
+    var list = sorted.filter(function(k){ return dominant.indexOf(k) > -1 || score[k] >= HIGH; });
+    var al = $("adviceList"); al.innerHTML = "";
+    list.forEach(function(k){
+      var st = STYLES[k];
+      var isDom = dominant.indexOf(k) > -1;
+      var div = document.createElement("div"); div.className = "advice";
+      div.style.borderLeftColor = st.color;
+      div.innerHTML = '<h3>'+st.name+(isDom ? '' : ' <span class="muted small">· juga cukup menonjol</span>')+'</h3>'+
+        '<div class="strength"><strong>Kekuatan:</strong> '+st.strength+'</div>'+
+        '<ul>'+st.tips.map(function(t){ return '<li>'+t+'</li>'; }).join("")+'</ul>';
+      al.appendChild(div);
+    });
+
+    show("result");
+  }
+
+  $("startBtn").addEventListener("click", function(){ idx = 0; renderQuestion(); show("quiz"); });
+  $("backBtn").addEventListener("click", function(){ if (idx > 0){ idx--; renderQuestion(); } });
+  $("restartBtn").addEventListener("click", function(){
+    answers = new Array(ORDER.length).fill(null); idx = 0; show("intro");
+  });
+})();
+</script>
+</body>
+</html>
